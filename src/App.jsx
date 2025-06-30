@@ -1,17 +1,35 @@
 // Главный компонент приложения
 const App = () => {
   const [section, setSection] = React.useState('home');
-  // Основные параметры
-  const [stats, setStats] = React.useState({
-    energy: 5,
-    physical: 5,
-    mental: 5,
-    money: 1000,
-  });
-  // Список задач
+  // Основные параметры и данные
+  const [stats, setStats] = React.useState(null);
   const [tasks, setTasks] = React.useState([]);
-  // Лента событий
   const [events, setEvents] = React.useState([]);
+  const [avatar, setAvatar] = React.useState(null);
+
+  // Загрузка начального состояния с сервера
+  React.useEffect(() => {
+    fetch('/api/state')
+      .then(r => r.json())
+      .then(data => {
+        setStats(data.stats);
+        setTasks(data.tasks);
+        setEvents(data.events);
+        setAvatar(data.avatar);
+      })
+      .catch(err => console.error('Failed to load state', err));
+  }, []);
+
+  // Сохранение состояния на сервер
+  React.useEffect(() => {
+    if (stats === null) return;
+    const state = { stats, tasks, events, avatar };
+    fetch('/api/state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state),
+    }).catch(err => console.error('Failed to save state', err));
+  }, [stats, tasks, events, avatar]);
 
   // Добавить час работы: -1 энергия, +100 денег
   const addWork = () => {
@@ -45,7 +63,7 @@ const App = () => {
   const renderSection = () => {
     switch (section) {
       case 'home':
-        return <Home stats={stats} events={events} />;
+        return <Home stats={stats} events={events} avatar={avatar} setAvatar={setAvatar} />;
       case 'work':
         return <Work stats={stats} addWork={addWork} />;
       case 'finance':

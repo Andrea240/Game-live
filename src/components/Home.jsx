@@ -1,6 +1,6 @@
 // Главная страница с общим статусом и событиями
-const Home = ({ stats, events }) => {
-  const [avatar, setAvatar] = React.useState(null);
+const Home = ({ stats, events, avatar, setAvatar }) => {
+  if (!stats) return <div>Загрузка...</div>;
 
   const handleAvatar = e => {
     const file = e.target.files[0];

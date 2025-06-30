@@ -1,5 +1,6 @@
 // Раздел "Финансы"
 const Finance = ({ stats, addMoney }) => {
+  if (!stats) return <div>Загрузка...</div>;
   return (
     <div className="bg-white bg-opacity-70 p-4 rounded shadow">
       <h2 className="text-xl font-bold mb-4 flex items-center">
