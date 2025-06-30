@@ -1,0 +1,10 @@
+{
+  "name": "game-live",
+  "version": "1.0.0",
+  "description": "Небольшой браузерный прототип трекера \"Игра Жизни\".",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"No tests\""
+  },
+  "type": "commonjs"
+}
